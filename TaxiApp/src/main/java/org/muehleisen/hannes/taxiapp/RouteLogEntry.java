@@ -1,10 +1,15 @@
 package org.muehleisen.hannes.taxiapp;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.opentripplanner.common.geometry.DistanceLibrary;
 import org.opentripplanner.common.geometry.SphericalDistanceLibrary;
@@ -94,5 +99,38 @@ public class RouteLogEntry {
 	public Object getPickupWeekday() {
 		cr.setTime(getPickupDatetime());
 		return cr.get(Calendar.DAY_OF_WEEK);
+	}
+
+	private static Map<String, String> lrt = new HashMap<String, String>();
+
+	public static void initLrt() {
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			// md5 exists, shut pu
+		}
+
+		for (int i = 0; i < 1000000; i++) {
+			String id1 = String.format("%06d", i);
+			String id2 = "5" + id1;
+
+			String h1 = new BigInteger(1, md.digest(id1.getBytes()))
+					.toString(16).toUpperCase();
+			String h2 = new BigInteger(1, md.digest(id2.getBytes()))
+					.toString(16).toUpperCase();
+			lrt.put(h1, id1);
+			lrt.put(h2, id2);
+		}
+	}
+
+	// http://www.theguardian.com/technology/2014/jun/27/new-york-taxi-details-anonymised-data-researchers-warn
+
+	public String getLicense() {
+		if (lrt.containsKey(fields[1])) {
+			return lrt.get(fields[1]);
+		} else {
+			return fields[1];
+		}
 	}
 }

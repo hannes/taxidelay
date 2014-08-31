@@ -21,5 +21,7 @@ public class RouteLogEntryTest {
 		assertEquals(rle.getPickupLongitude(), -73.97625, 0.1);
 		assertEquals(rle.getDropoffLatitude(), 40.747868, 0.1);
 		assertEquals(rle.getDropoffLongitude(), -74.002586, 0.1);
+		RouteLogEntry.initLrt();
+		assertEquals(rle.getLicense(),"499752");
 	}
 }

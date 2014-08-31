@@ -29,7 +29,6 @@ import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
 
-
 // this reads trip data from http://www.andresmh.com/nyctaxitrips/
 public class TaxiRoute extends Thread {
 
@@ -55,7 +54,10 @@ public class TaxiRoute extends Thread {
 				.availableProcessors(), Runtime.getRuntime()
 				.availableProcessors(), Integer.MAX_VALUE, TimeUnit.DAYS,
 				taskQueue, new ThreadPoolExecutor.DiscardPolicy());
-
+		// create rainbow table for driver lookup
+		log.info("Creating driver license rainbow table.");
+		RouteLogEntry.initLrt();
+		
 		// bring up routing service
 		log.info("Bringing up OTP Graph Service from '" + graph + "'.");
 		GraphServiceImpl graphService = new GraphServiceImpl();
@@ -165,9 +167,10 @@ public class TaxiRoute extends Thread {
 	}
 
 	public synchronized void deliver(RouteTaskResult rtr) {
-		System.out.println(rtr.getRouteLogEntry().getTripDistanceMeters()
-				+ "\t" + rtr.getRouteLogEntry().getDistanceCrowfliesMeters()
-				+ "\t" + rtr.getRouteLogEntry().getPickupWeekday() + "\t"
+		System.out.println(rtr.getRouteLogEntry().getLicense() + "\t"
+				+ rtr.getRouteLogEntry().getTripDistanceMeters() + "\t"
+				+ rtr.getRouteLogEntry().getDistanceCrowfliesMeters() + "\t"
+				+ rtr.getRouteLogEntry().getPickupWeekday() + "\t"
 				+ rtr.getRouteLogEntry().getPickupHourOfDay() + "\t"
 				+ rtr.getRouteLogEntry().getTripTimeInSecs() + "\t"
 				+ rtr.getGraphPath().getDuration()
