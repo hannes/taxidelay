@@ -102,29 +102,41 @@ public class RouteLogEntry {
 	}
 
 	private static Map<String, String> lrt = new HashMap<String, String>();
-
+// see https://medium.com/@vijayp/of-taxis-and-rainbows-f6bc289679a1
 	public static void initLrt() {
-		MessageDigest md = null;
-		try {
-			md = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			// md5 exists, shut pu
-		}
-
 		for (int i = 0; i < 1000000; i++) {
 			String id1 = String.format("%06d", i);
 			String id2 = "5" + id1;
-
-			String h1 = new BigInteger(1, md.digest(id1.getBytes()))
-					.toString(16).toUpperCase();
-			String h2 = new BigInteger(1, md.digest(id2.getBytes()))
-					.toString(16).toUpperCase();
-			lrt.put(h1, id1);
-			lrt.put(h2, id2);
+			
+			lrt.put(md5(id1), id1);
+			lrt.put(md5(id2), id2);
 		}
 	}
 
-	// http://www.theguardian.com/technology/2014/jun/27/new-york-taxi-details-anonymised-data-researchers-warn
+	private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+
+	private static String toHex(byte[] data) {
+		char[] chars = new char[data.length * 2];
+		for (int i = 0; i < data.length; i++) {
+			chars[i * 2] = HEX_DIGITS[(data[i] >> 4) & 0xf];
+			chars[i * 2 + 1] = HEX_DIGITS[data[i] & 0xf];
+		}
+		return new String(chars);
+	}
+
+	public static MessageDigest md;
+	static {
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			// md5 exists, shut up
+		}
+	}
+
+	public static String md5(String in) {
+		return toHex(md.digest(in.getBytes()));
+	}
+
 
 	public String getLicense() {
 		if (lrt.containsKey(fields[1])) {
