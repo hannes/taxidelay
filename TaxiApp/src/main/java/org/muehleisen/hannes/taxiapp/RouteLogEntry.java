@@ -1,6 +1,5 @@
 package org.muehleisen.hannes.taxiapp;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -107,9 +106,10 @@ public class RouteLogEntry {
 		for (int i = 0; i < 1000000; i++) {
 			String id1 = String.format("%06d", i);
 			String id2 = "5" + id1;
-			
+			String id3 = Integer.toString(i);
 			lrt.put(md5(id1), id1);
 			lrt.put(md5(id2), id2);
+			lrt.put(md5(id3), id3);
 		}
 	}
 

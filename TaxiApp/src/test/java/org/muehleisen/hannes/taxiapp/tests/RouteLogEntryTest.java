@@ -26,7 +26,9 @@ public class RouteLogEntryTest {
 				"095A4C5DF7C5B5F627317EF75F7C9EBA");
 		assertEquals(RouteLogEntry.md5("5384691"),
 				"00711D0CC3FB5BC905BB62D9B62296D6");
-
+		assertEquals(RouteLogEntry.md5("99495"),
+				"5B34A2589D1D2106FC0C47564A4833F0");
+		
 		RouteLogEntry.initLrt();
 		assertEquals(rle.getLicense(), "499752");
 	}
