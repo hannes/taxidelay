@@ -19,7 +19,7 @@ print(driversaggr %>% arrange(desc(tdistkms)) %>% select(name,tdistkms) %>% head
 print(driversaggr %>% arrange(desc(ttimehrs)) %>% select(name,ttimehrs) %>% head(10))
 
 # some housekeeping
-print(group_by(dd,weekdayn) %>% summarize(count=n()))
+print(group_by(dd,weekday) %>% summarize(count=n()))
 
 std <- function(x) quantile(x,.99)
 theme <- theme_few(base_size = 14)
